@@ -1,4 +1,10 @@
-export async function GET() {
-    console.log("Executado")
-  return  Response.json({message: "OK"})
+import { NextRequest } from "next/server";
+
+export async function GET(req: NextRequest) {
+
+
+    console.log(req.nextUrl.searchParams)
+
+    // console.log("Executado", req)
+    return Response.json({ message: "OK" })
 }
