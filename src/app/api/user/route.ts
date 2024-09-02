@@ -3,12 +3,23 @@ import prisma from "../../../../lib/db";
 
 export async function GET(req: NextRequest) {
 
-
     console.log(req.nextUrl.searchParams)
-
     // console.log("Executado", req)
-    return Response.json({ message: "OK" })
+    try {
+        const users = await prisma.user.findMany()
+        return Response.json({ message: "OK", users })
+    } catch (error) {
+        return NextResponse.json(
+            {
+                message: "Error", error
+            },
+            {
+                status: 500
+            }
+        )
+    }
 }
+
 
 export async function POST(req: NextRequest) {
 
