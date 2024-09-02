@@ -20,7 +20,6 @@ export async function GET(req: NextRequest) {
     }
 }
 
-
 export async function POST(req: NextRequest) {
 
     const { name } = await req.json();
@@ -29,6 +28,29 @@ export async function POST(req: NextRequest) {
         const user = await prisma.user.create({
             data: {
                 name
+            }
+        })
+        return Response.json({ message: "OK", user })
+    } catch (error) {
+        return NextResponse.json(
+            {
+                message: "Error", error
+            },
+            {
+                status: 500
+            }
+        )
+    }
+}
+
+export async function DELETE(req: NextRequest) {
+
+    const { id } = await req.json();
+    // console.log(name)
+    try {
+        const user = await prisma.user.delete({
+            where: {
+                id
             }
         })
         return Response.json({ message: "OK", user })
