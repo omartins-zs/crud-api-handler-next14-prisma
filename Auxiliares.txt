@@ -2,4 +2,38 @@ Comandos
 
 npm install prisma --save-dev
 
-npx prisma init 
+npx prisma init --datasource-provider sqlite
+
+npx prisma migrate dev
+
+Railway, Render Supabase ou Neon
+
+Railway - Não deu certo
+Usado Render
+
+Extensão do POSTMAN
+
+URL:http://localhost:3000/api/user - GET
+URL:http://localhost:3000/api/user?id=1 - GETBYID
+URL:http://localhost:3000/api/user - POST
+
+POST
+Body - raw - json
+
+{
+    "name": "Gabriel Martins"
+}
+
+DELETE
+Body - raw - json
+
+{
+    "id": 2
+}
+UPDATE
+Body - raw - json
+
+{
+    "id": 3 ,
+    "name": "Gabriel Martins"
+}
