@@ -65,3 +65,28 @@ export async function DELETE(req: NextRequest) {
         )
     }
 }
+
+export async function PUT(req: NextRequest) {
+
+    const { id, name } = await req.json();
+    try {
+        const user = await prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                name,
+            }
+        })
+        return Response.json({ message: "OK", user })
+    } catch (error) {
+        return NextResponse.json(
+            {
+                message: "Error", error
+            },
+            {
+                status: 500
+            }
+        )
+    }
+}
