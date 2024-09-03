@@ -9,7 +9,10 @@ npx prisma migrate dev
 Railway, Render Supabase ou Neon
 
 Railway - Não deu certo
-Usado Render
+Render - Não deu certo
+Neon - Deu certo
+
+https://neon.tech/
 
 Extensão do POSTMAN
 
