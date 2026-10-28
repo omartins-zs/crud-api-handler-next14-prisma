@@ -1,0 +1,76 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crud_next14_app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: 1
+    volumes:
+      - next_build_cache:/app/.next
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - crud_network
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: crud_next14_nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    networks:
+      - crud_network
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: crud_next14_postgres
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-crud_api_handler_next14_prisma}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres} -d $${POSTGRES_DB:-crud_api_handler_next14_prisma}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - crud_network
+
+  adminer:
+    image: adminer:latest
+    container_name: crud_next14_adminer
+    restart: unless-stopped
+    ports:
+      - "8085:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - crud_network
+
+volumes:
+  postgres_data:
+  next_build_cache:
+
+networks:
+  crud_network:
+    driver: bridge
